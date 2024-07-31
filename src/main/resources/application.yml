@@ -1,0 +1,32 @@
+security:
+  jwt:
+    token:
+      secret-key: eW91ci12ZXJ5LXNlY3VyZS1zZWNyZXQ=
+
+server:
+  port: 8080
+  error:
+    include-stacktrace: never
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/test
+    username: root
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: none
+      type: trace
+      stat: debug
+      orm:
+        jdbc:
+          bind: trace
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+    show-sql: true
+    open-in-view: true
+logging:
+  file:
+    path: ./logs
+    name: logs.log
+
