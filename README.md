@@ -21,6 +21,3 @@ $ docker compose up
 ```bash
 $ mvn spring-boot:run
 ```
-
->Did you find any bug or wanna tell me something?
-Let me know in my [Twitter/X](https://x.com/m1guelsb).
