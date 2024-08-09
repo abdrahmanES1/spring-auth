@@ -1,6 +1,5 @@
 package com.esab.springauth.config;
 
-import org.springdoc.core.GroupedOpenApi;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.context.annotation.Bean;
@@ -24,12 +23,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import com.esab.springauth.config.auth.OurSecurityFilter;
 import com.esab.springauth.config.auth.SecurityLoggingFilter;
 
-import io.swagger.v3.oas.models.Components;
-import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.info.Info;
-import io.swagger.v3.oas.models.security.SecurityRequirement;
-import io.swagger.v3.oas.models.security.SecurityScheme;
-
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true)
@@ -44,10 +37,11 @@ public class AuthConfig {
   private AuthenticationEntryPoint customAuthenticationEntryPoint;
 
   private static final String[] SWAGGER_WHITELIST = {
+      "/swagger-ui.html",
       "/swagger-ui/**",
       "/v3/api-docs/**",
       "/swagger-resources/**",
-      "/swagger-resources",
+      "/swagger-resources"
   };
 
   @Bean
@@ -56,8 +50,9 @@ public class AuthConfig {
         .csrf(csrf -> csrf.disable())
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(authorize -> authorize
-            .requestMatchers(SWAGGER_WHITELIST).permitAll()
             .requestMatchers(HttpMethod.POST, "/api/v1/auth/*").permitAll()
+            .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**")
+            .permitAll()
             .requestMatchers("/api/v1/authors").permitAll()
             .requestMatchers(HttpMethod.GET, "/api/v1/books").hasRole("USER")
             .anyRequest().authenticated())
@@ -86,25 +81,25 @@ public class AuthConfig {
     return new GrantedAuthorityDefaults("ROLE_");
   }
 
-  @Bean
-  GroupedOpenApi publicApi() {
-    return GroupedOpenApi
-        .builder()
-        .group("public-apis")
-        .pathsToMatch("/**")
-        .build();
-  }
+  // @Bean
+  // GroupedOpenApi publicApi() {
+  // return GroupedOpenApi
+  // .builder()
+  // .group("public-apis")
+  // .pathsToMatch("/**")
+  // .build();
+  // }
 
-  @Bean
-  OpenAPI customOpenAPI() {
-    return new OpenAPI()
-        .info(new Info().title("API title").version("API vesion"))
-        .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
-        .components(
-            new Components()
-                .addSecuritySchemes("bearerAuth", new SecurityScheme()
-                    .type(SecurityScheme.Type.HTTP)
-                    .scheme("bearer")
-                    .bearerFormat("JWT")));
-  }
+  // @Bean
+  // OpenAPI customOpenAPI() {
+  // return new OpenAPI()
+  // .info(new Info().title("API title").version("API vesion"))
+  // .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
+  // .components(
+  // new Components()
+  // .addSecuritySchemes("bearerAuth", new SecurityScheme()
+  // .type(SecurityScheme.Type.HTTP)
+  // .scheme("bearer")
+  // .bearerFormat("JWT")));
+  // }
 }
