@@ -2,9 +2,12 @@ package com.esab.springauth.entities;
 
 import java.util.Collection;
 
+import org.springframework.data.redis.core.RedisHash;
+
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -20,6 +23,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Builder
+// @RedisHash
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "authors")
@@ -35,6 +39,9 @@ public class Author {
     @OneToMany(mappedBy = "author", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonManagedReference
     private Collection<Book> books;
+
+    @Column(name = "created_by")
+    private Long user_id;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "created_by")

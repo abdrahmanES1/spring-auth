@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+logs.log
+dump.rdb
+logs
+*logs.log

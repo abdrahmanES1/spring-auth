@@ -1,10 +1,13 @@
 package com.esab.springauth.controllers;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -36,6 +39,7 @@ public class BookController {
 
   @GetMapping
   @PreAuthorize("hasAuthority('view:books')")
+  @Cacheable("books")
   public ResponseEntity<GenericResponse<List<Book>>> findAll() {
     var books = bookrepository.findAll()
         .stream()
@@ -48,7 +52,9 @@ public class BookController {
         .data(books)
         .build();
 
-    return ResponseEntity.ok().body(response);
+    return ResponseEntity.ok()
+        .cacheControl(CacheControl.maxAge(Duration.ofMinutes(10))) // Cache for 10 minutes
+        .body(response);
 
   }
 

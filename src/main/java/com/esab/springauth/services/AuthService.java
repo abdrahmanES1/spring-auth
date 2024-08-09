@@ -4,16 +4,18 @@ import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.esab.springauth.dtos.users.LogInDto;
 import com.esab.springauth.dtos.users.RegisterDto;
 import com.esab.springauth.entities.Role;
 import com.esab.springauth.entities.User;
 import com.esab.springauth.exceptions.InvalidJwtException;
 import com.esab.springauth.repositories.RoleRepository;
 import com.esab.springauth.repositories.UserRepository;
+
+import jakarta.validation.Valid;
 
 import java.util.Optional;
 
@@ -31,7 +33,7 @@ public class AuthService  {
   //   return user;
   // }
 
-  public UserDetails register(RegisterDto data) throws InvalidJwtException {
+  public UserDetails register(@Valid RegisterDto data) throws InvalidJwtException {
 
     if (repository.findByLogin(data.login()) != null) {
       throw new InvalidJwtException("Username already exists");

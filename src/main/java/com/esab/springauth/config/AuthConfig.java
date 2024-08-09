@@ -1,8 +1,10 @@
 package com.esab.springauth.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -47,8 +49,8 @@ public class AuthConfig {
         .exceptionHandling(exceptionHandling -> exceptionHandling
             .accessDeniedHandler(customAccessDeniedHandler)
             .authenticationEntryPoint(customAuthenticationEntryPoint))
-        .addFilterBefore(new SecurityLoggingFilter(), UsernamePasswordAuthenticationFilter.class)
         .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
+        .addFilterAfter(new SecurityLoggingFilter(), UsernamePasswordAuthenticationFilter.class)
         .build();
   }
 

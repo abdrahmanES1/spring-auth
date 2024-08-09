@@ -1,6 +1,6 @@
 services:
   db:
-    image: postgres
+    image: mysql
     environment:
       POSTGRES_USER: m1guelsb
       POSTGRES_PASSWORD: root

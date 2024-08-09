@@ -1,5 +1,7 @@
 package com.esab.springauth.entities;
 
+import org.springframework.data.redis.core.RedisHash;
+
 import com.esab.springauth.annotations.SecuredEntity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -17,6 +19,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Builder
+// @RedisHash
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "books")

@@ -3,6 +3,8 @@ package com.esab.springauth.entities;
 import java.util.Collection;
 import java.util.List;
 
+import org.springframework.data.redis.core.RedisHash;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -17,6 +19,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @Builder
+// @RedisHash
 @NoArgsConstructor
 @AllArgsConstructor
 public class Role {
