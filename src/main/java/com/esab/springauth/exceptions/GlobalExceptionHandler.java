@@ -1,6 +1,7 @@
 package com.esab.springauth.exceptions;
 
 import java.nio.file.AccessDeniedException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,17 +27,30 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(AccessDeniedException.class)
   @ResponseStatus(HttpStatus.FORBIDDEN)
   @ResponseBody
-  public String handleAccessDeniedException(HttpServletRequest request, HttpServletResponse response,
+  public ResponseEntity<Map<String, List<String>>> handleAccessDeniedException(HttpServletRequest request,
+      HttpServletResponse response,
       AccessDeniedException ex) {
-    return "{\"errors\": [\"Access Denied: You do not have the required role\"]}";
+    Map<String, List<String>> errorResponse = new HashMap<>();
+    List<String> errors = new ArrayList<>();
+    errors.add("Access Denied: You do not have the required role");
+    errorResponse.put("errors", errors);
+
+    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorsMap(errors));
+
   }
 
   @ExceptionHandler(AuthenticationException.class)
   @ResponseStatus(HttpStatus.UNAUTHORIZED)
   @ResponseBody
-  public String handleAuthenticationException(HttpServletRequest request, HttpServletResponse response,
+  public ResponseEntity<Map<String, List<String>>> handleAuthenticationException(HttpServletRequest request,
+      HttpServletResponse response,
       AuthenticationException ex) {
-    return "{\"error\": [\"Authentication required: Token not provided or invalid\"]}";
+    Map<String, List<String>> errorResponse = new HashMap<>();
+    List<String> errors = new ArrayList<>();
+    errors.add("Authentication required: Token not provided or invalid");
+    errorResponse.put("errors", errors);
+
+    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorsMap(errors));
   }
 
   @ExceptionHandler(Exception.class)

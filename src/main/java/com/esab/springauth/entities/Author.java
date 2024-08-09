@@ -40,8 +40,7 @@ public class Author {
     @JsonManagedReference
     private Collection<Book> books;
 
-    @Column(name = "created_by")
-    private Long user_id;
+
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "created_by")

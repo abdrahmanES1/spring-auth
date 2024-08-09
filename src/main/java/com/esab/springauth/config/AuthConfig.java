@@ -1,10 +1,10 @@
 package com.esab.springauth.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.EnableCaching;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
+
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -36,6 +36,14 @@ public class AuthConfig {
   @Autowired
   private AuthenticationEntryPoint customAuthenticationEntryPoint;
 
+  private static final String[] SWAGGER_WHITELIST = {
+      "/swagger-ui.html",
+      "/swagger-ui/**",
+      "/v3/api-docs/**",
+      "/swagger-resources/**",
+      "/swagger-resources"
+  };
+
   @Bean
   SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
     return httpSecurity
@@ -43,6 +51,8 @@ public class AuthConfig {
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(authorize -> authorize
             .requestMatchers(HttpMethod.POST, "/api/v1/auth/*").permitAll()
+            .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**")
+            .permitAll()
             .requestMatchers("/api/v1/authors").permitAll()
             .requestMatchers(HttpMethod.GET, "/api/v1/books").hasRole("USER")
             .anyRequest().authenticated())
@@ -70,4 +80,26 @@ public class AuthConfig {
 
     return new GrantedAuthorityDefaults("ROLE_");
   }
+
+  // @Bean
+  // GroupedOpenApi publicApi() {
+  // return GroupedOpenApi
+  // .builder()
+  // .group("public-apis")
+  // .pathsToMatch("/**")
+  // .build();
+  // }
+
+  // @Bean
+  // OpenAPI customOpenAPI() {
+  // return new OpenAPI()
+  // .info(new Info().title("API title").version("API vesion"))
+  // .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
+  // .components(
+  // new Components()
+  // .addSecuritySchemes("bearerAuth", new SecurityScheme()
+  // .type(SecurityScheme.Type.HTTP)
+  // .scheme("bearer")
+  // .bearerFormat("JWT")));
+  // }
 }

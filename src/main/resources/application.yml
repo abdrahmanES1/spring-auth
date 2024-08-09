@@ -8,6 +8,10 @@ server:
   error:
     include-stacktrace: never
 spring:
+  security:
+    user:
+      name: admin
+      password: admin
   main:
     allow-bean-definition-overriding: true
   datasource:
@@ -43,4 +47,3 @@ logging:
     name: logs/app.log
   # level:
   # org.springframework: DEBUG
-
