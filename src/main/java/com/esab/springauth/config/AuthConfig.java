@@ -19,6 +19,8 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 import com.esab.springauth.config.auth.OurSecurityFilter;
 import com.esab.springauth.config.auth.SecurityLoggingFilter;
@@ -43,6 +45,13 @@ public class AuthConfig {
       "/swagger-resources/**",
       "/swagger-resources"
   };
+  private static final String[] ADMIN_WHITELIST = {
+      "/instances/**",
+      "/actuator/**",
+      "/v3/api-docs/**",
+      "/swagger-resources/**",
+      "/swagger-resources"
+  };
 
   @Bean
   SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -50,6 +59,11 @@ public class AuthConfig {
         .csrf(csrf -> csrf.disable())
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(authorize -> authorize
+            .requestMatchers("/**").permitAll()
+            .requestMatchers("/instances/**").permitAll()
+            .requestMatchers("/actuator/**").permitAll()
+            .requestMatchers("/assets/**").permitAll()
+            .requestMatchers("/applications/**").permitAll()
             .requestMatchers(HttpMethod.POST, "/api/v1/auth/*").permitAll()
             .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**")
             .permitAll()
@@ -81,25 +95,5 @@ public class AuthConfig {
     return new GrantedAuthorityDefaults("ROLE_");
   }
 
-  // @Bean
-  // GroupedOpenApi publicApi() {
-  // return GroupedOpenApi
-  // .builder()
-  // .group("public-apis")
-  // .pathsToMatch("/**")
-  // .build();
-  // }
 
-  // @Bean
-  // OpenAPI customOpenAPI() {
-  // return new OpenAPI()
-  // .info(new Info().title("API title").version("API vesion"))
-  // .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
-  // .components(
-  // new Components()
-  // .addSecuritySchemes("bearerAuth", new SecurityScheme()
-  // .type(SecurityScheme.Type.HTTP)
-  // .scheme("bearer")
-  // .bearerFormat("JWT")));
-  // }
 }

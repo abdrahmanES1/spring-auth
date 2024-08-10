@@ -1,6 +1,6 @@
 package com.esab.springauth.entities;
 
-import org.springframework.data.redis.core.RedisHash;
+// import org.springframework.data.redis.core.RedisHash;
 import org.springframework.security.core.GrantedAuthority;
 
 import jakarta.persistence.Entity;

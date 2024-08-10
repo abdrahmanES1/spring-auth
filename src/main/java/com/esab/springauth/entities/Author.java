@@ -2,7 +2,7 @@ package com.esab.springauth.entities;
 
 import java.util.Collection;
 
-import org.springframework.data.redis.core.RedisHash;
+// import org.springframework.data.redis.core.RedisHash;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
